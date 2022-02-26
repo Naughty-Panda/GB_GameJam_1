@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseCharacter.h"
 #include "GameFramework/Character.h"
 #include "GameJamCharacter.generated.h"
 
 UCLASS(Blueprintable)
-class AGameJamCharacter : public ACharacter
+class AGameJamCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
