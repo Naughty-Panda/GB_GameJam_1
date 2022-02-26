@@ -47,5 +47,5 @@ AGameJamCharacter::AGameJamCharacter()
 
 void AGameJamCharacter::Tick(float DeltaSeconds)
 {
-    Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaSeconds);
 }

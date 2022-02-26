@@ -18,14 +18,14 @@ void AGameJamPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
-	if(bInputPressed)
+	if (bInputPressed)
 	{
 		FollowTime += DeltaTime;
 
 		// Look for the touch location
 		FVector HitLocation = FVector::ZeroVector;
 		FHitResult Hit;
-		if(bIsTouch)
+		if (bIsTouch)
 		{
 			GetHitResultUnderFinger(ETouchIndex::Touch1, ECC_Visibility, true, Hit);
 		}
@@ -37,7 +37,7 @@ void AGameJamPlayerController::PlayerTick(float DeltaTime)
 
 		// Direct the Pawn towards that location
 		APawn* const MyPawn = GetPawn();
-		if(MyPawn)
+		if (MyPawn)
 		{
 			FVector WorldDirection = (HitLocation - MyPawn->GetActorLocation()).GetSafeNormal();
 			MyPawn->AddMovementInput(WorldDirection, 1.f, false);
@@ -72,7 +72,7 @@ void AGameJamPlayerController::OnSetDestinationReleased()
 	bInputPressed = false;
 
 	// If it was a short press
-	if(FollowTime <= ShortPressThreshold)
+	if (FollowTime <= ShortPressThreshold)
 	{
 		// We look for the location in the world where the player has pressed the input
 		FVector HitLocation = FVector::ZeroVector;
@@ -82,6 +82,7 @@ void AGameJamPlayerController::OnSetDestinationReleased()
 
 		// We move there and spawn some particles
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, HitLocation);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, HitLocation, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, HitLocation, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true,
+		                                               ENCPoolMethod::None, true);
 	}
 }
