@@ -7,6 +7,9 @@ ABaseCharacter::ABaseCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Create Character Data Component.
+	CharacterData = CreateDefaultSubobject<UCharacterData>(TEXT("Character Data"));
 }
 
 // Called when the game starts or when spawned

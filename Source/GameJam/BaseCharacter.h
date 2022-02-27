@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterData.h"
 #include "GameFramework/Character.h"
 #include "Types.h"
 
@@ -28,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetState(ECharacterState NewState) { State = NewState; }
 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UCharacterData* GetCharacterData() const { return CharacterData; }
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -35,6 +39,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+	/** Character state in world */
 	UPROPERTY(BlueprintReadOnly, Category="Character")
 	ECharacterState State;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Character")
+	TObjectPtr<UCharacterData> CharacterData = nullptr;
 };

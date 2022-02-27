@@ -7,6 +7,8 @@
 
 #include "BasePlayerController.generated.h"
 
+class APlayerCharacter;
+
 /**
  * 
  */
@@ -18,6 +20,14 @@ class GAMEJAM_API ABasePlayerController : public APlayerController
 public:
 	ABasePlayerController();
 
+	void SwitchCharacter();
+
+	UFUNCTION(BlueprintCallable)
+	void SetDefaultCursor();
+
+	UFUNCTION(BlueprintCallable)
+	void SetBattleCursor();
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -25,6 +35,7 @@ protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
+	virtual void BeginPlay() override;
 	// End PlayerController interface
 
 	/** Input handlers for SetDestination action. */
@@ -43,4 +54,22 @@ public:
 	/** FX Class that we will spawn when clicking */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	class UNiagaraSystem* FXCursor;
+
+	/** Default cursor widget class */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TSubclassOf<UUserWidget> DefaultCursorClass;
+
+	/** Battle cursor widget class */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TSubclassOf<UUserWidget> BattleCursorClass;
+
+	/** Actual cursors */
+	UPROPERTY()
+	UUserWidget* DefaultCursor;
+	UPROPERTY()
+	UUserWidget* BattleCursor;
+
+	/** Party members */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Party, meta=(AllowedClasses = "PlayerCharacter"))
+	TArray<TSoftObjectPtr<APawn>> PartyMembers;
 };
