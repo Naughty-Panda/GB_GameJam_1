@@ -10,6 +10,10 @@ ABaseCharacter::ABaseCharacter()
 
 	// Create Character Data Component.
 	CharacterData = CreateDefaultSubobject<UCharacterData>(TEXT("Character Data"));
+
+	// Setup additional info.
+	State = ECharacterState::CS_FreeRoam;
+	Faction = ECharacterFaction::CF_Enemy;
 }
 
 // Called when the game starts or when spawned

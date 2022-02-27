@@ -40,6 +40,9 @@ APlayerCharacter::APlayerCharacter()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	// Setup additional info.
+	Faction = ECharacterFaction::CF_Ally;
 }
 
 // Called when the game starts or when spawned
@@ -58,4 +61,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void APlayerCharacter::UseItem_Implementation(ABaseItem* Item)
+{
+	GEngine->AddOnScreenDebugMessage(1, 1.f, FColor::Purple, TEXT("Use item..."));
 }

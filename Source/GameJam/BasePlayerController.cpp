@@ -15,15 +15,58 @@ ABasePlayerController::ABasePlayerController()
 
 void ABasePlayerController::SwitchCharacter()
 {
-	PartyMembers.AddUnique(GetPawn());
+}
 
-	if (PartyMembers.Num() > 1)
+void ABasePlayerController::AddPartyMember(APawn* Member)
+{
+	if (Member)
 	{
-		if (auto* NewCharacter = PartyMembers[0].LoadSynchronous())
-		{
-			UnPossess();
-			Possess(NewCharacter);
-		}
+		PartyMembers.AddUnique(Member);
+	}
+}
+
+void ABasePlayerController::SelectPartyMember1()
+{
+	if (!PartyMembers.IsValidIndex(0))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Party member index!"));
+		return;
+	}
+
+	if (SelectedPawn && SelectedPawn != PartyMembers[0])
+	{
+		SelectedPawn = PartyMembers[0];
+		PossessPartyMember(SelectedPawn);
+	}
+}
+
+void ABasePlayerController::SelectPartyMember2()
+{
+	if (!PartyMembers.IsValidIndex(1))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Party member index!"));
+		return;
+	}
+
+	if (SelectedPawn && SelectedPawn != PartyMembers[1])
+	{
+		SelectedPawn = PartyMembers[1];
+		PossessPartyMember(SelectedPawn);
+	}
+}
+
+void ABasePlayerController::SelectPartyMember3()
+{
+	if (!PartyMembers.IsValidIndex(2))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Party member index!"));
+		return;
+	}
+
+	if (SelectedPawn && SelectedPawn != PartyMembers[2])
+	{
+		SelectedPawn = PartyMembers[2];
+		PossessPartyMember(SelectedPawn);
 	}
 }
 
@@ -43,32 +86,25 @@ void ABasePlayerController::SetBattleCursor()
 	}
 }
 
+void ABasePlayerController::PossessPartyMember(APawn* Member)
+{
+	UnPossess();
+	Possess(Member);
+}
+
 void ABasePlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
+	FVector HitLocation = FVector::ZeroVector;
+	FHitResult Hit;
+
+	GetHitResultUnderCursor(ECC_Camera, true, Hit);
+
 	if (bInputPressed)
 	{
 		FollowTime += DeltaTime;
-
-		// Look for the touch location
-		FVector HitLocation = FVector::ZeroVector;
-		FHitResult Hit;
-
-		GetHitResultUnderCursor(ECC_Visibility, true, Hit);
 		HitLocation = Hit.Location;
-
-		if (APawn* HitPawn = Cast<APawn>(Hit.GetActor()))
-		{
-			GEngine->AddOnScreenDebugMessage(1, DeltaTime, FColor::Red, TEXT("Hit Actor!"));
-			GEngine->AddOnScreenDebugMessage(1, DeltaTime, FColor::Red, Hit.GetActor()->GetName());
-
-			SetBattleCursor();
-		}
-		else
-		{
-			SetDefaultCursor();
-		}
 
 		// Direct the Pawn towards that location
 		if (APawn* const MyPawn = GetPawn())
@@ -81,6 +117,9 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 	{
 		FollowTime = 0.f;
 	}
+
+	// Set cursor
+	Cast<ABaseCharacter>(Hit.GetActor()) ? SetBattleCursor() : SetDefaultCursor();
 }
 
 void ABasePlayerController::SetupInputComponent()
@@ -92,6 +131,9 @@ void ABasePlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Released, this, &ABasePlayerController::OnSetDestinationReleased);
 
 	InputComponent->BindAction("SwitchCharacter", IE_Pressed, this, &ABasePlayerController::SwitchCharacter);
+	InputComponent->BindAction("SelectPartyMember1", IE_Pressed, this, &ABasePlayerController::SelectPartyMember1);
+	InputComponent->BindAction("SelectPartyMember2", IE_Pressed, this, &ABasePlayerController::SelectPartyMember2);
+	InputComponent->BindAction("SelectPartyMember3", IE_Pressed, this, &ABasePlayerController::SelectPartyMember3);
 }
 
 void ABasePlayerController::BeginPlay()
@@ -107,6 +149,11 @@ void ABasePlayerController::BeginPlay()
 	if (*DefaultCursorClass)
 	{
 		BattleCursor = CreateWidget(this, BattleCursorClass, FName("BattleCursor"));
+	}
+
+	if (auto* CurrentPawn = GetPawn())
+	{
+		SelectedPawn = CurrentPawn;
 	}
 }
 

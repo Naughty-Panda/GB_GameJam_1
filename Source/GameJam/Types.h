@@ -10,6 +10,24 @@ enum class ECharacterState : uint8
 	CS_Encounter
 };
 
+// Character states in world
+UENUM(BlueprintType)
+enum class ECharacterFaction : uint8
+{
+	CF_Ally,
+	CF_Enemy
+};
+
+// Character states in world
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	IT_None,
+	IT_Weapon,
+	IT_Armor,
+	IT_Consumable
+};
+
 // Game stats
 USTRUCT(BlueprintType)
 struct FGameStats
