@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/ItemInterface.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class GAMEJAM_API APlayerCharacter : public ABaseCharacter
+class GAMEJAM_API APlayerCharacter : public ABaseCharacter, public IItemInterface
 {
 	GENERATED_BODY()
 
@@ -26,6 +27,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// IItemInterface implementation
+	UFUNCTION(BlueprintNativeEvent)
+	void UseItem(ABaseItem* Item) override;
+	virtual void UseItem_Implementation(ABaseItem* Item);
 
 public:
 	/** Returns TopDownCameraComponent subobject **/

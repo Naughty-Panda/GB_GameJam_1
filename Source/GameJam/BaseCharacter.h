@@ -31,6 +31,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UCharacterData* GetCharacterData() const { return CharacterData; }
+	
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE ECharacterFaction GetFaction() const { return Faction; }
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -40,8 +43,11 @@ public:
 
 protected:
 	/** Character state in world */
-	UPROPERTY(BlueprintReadOnly, Category="Character")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Character")
 	ECharacterState State;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Character")
+	ECharacterFaction Faction;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Character")
 	TObjectPtr<UCharacterData> CharacterData = nullptr;

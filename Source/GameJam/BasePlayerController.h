@@ -20,8 +20,25 @@ class GAMEJAM_API ABasePlayerController : public APlayerController
 public:
 	ABasePlayerController();
 
+	/** Party Controls */
 	void SwitchCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	void AddPartyMember(APawn* Member);
+
+	UFUNCTION(BlueprintCallable)
+	void SelectPartyMember1();
+
+	UFUNCTION(BlueprintCallable)
+	void SelectPartyMember2();
+
+	UFUNCTION(BlueprintCallable)
+	void SelectPartyMember3();
+
+	UFUNCTION(BlueprintCallable)
+	void PossessPartyMember(APawn* Member);
+
+	/** Cursor functions */
 	UFUNCTION(BlueprintCallable)
 	void SetDefaultCursor();
 
@@ -71,5 +88,13 @@ public:
 
 	/** Party members */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Party, meta=(AllowedClasses = "PlayerCharacter"))
-	TArray<TSoftObjectPtr<APawn>> PartyMembers;
+	TArray<APawn*> PartyMembers;
+
+	/** UNUSED */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Party, meta=(AllowedClasses = "PlayerCharacter"))
+	TArray<TSoftObjectPtr<APawn>> UnusedPartyMembers;
+
+protected:
+	UPROPERTY()
+	APawn* SelectedPawn = nullptr;
 };
